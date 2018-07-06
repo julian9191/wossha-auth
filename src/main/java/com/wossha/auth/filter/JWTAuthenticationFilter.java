@@ -10,10 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonParseException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -23,7 +21,7 @@ import org.springframework.security.core.userdetails.User;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wossha.auth.models.entity.Usuario;
+import com.wossha.auth.models.entity.LoginUser;
 import com.wossha.auth.service.JWTService;
 
 @CrossOrigin("http://localhost:4200")
@@ -50,10 +48,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			logger.info("Password from request parameter (form-data): " + password);
 
 		} else {
-			Usuario user = null;
+			LoginUser user = null;
 			try {
 
-				user = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
+				user = new ObjectMapper().readValue(request.getInputStream(), LoginUser.class);
 				
 				username = user.getUsername();
 				password = user.getPassword();

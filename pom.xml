@@ -62,6 +62,26 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- for db annotation, ex @Transactional -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- oracle connector -->
+        <dependency>
+		    <groupId>com.github.noraui</groupId>
+		    <artifactId>ojdbc7</artifactId>
+		    <version>12.1.0.2</version>
+		</dependency>
+		<!-- jdbi: db table mapper -->
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi</artifactId>
+            <version>2.62</version>
+        </dependency>
+        
+        
 	</dependencies>
 
 	<build>

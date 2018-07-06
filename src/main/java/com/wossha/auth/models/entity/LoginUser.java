@@ -1,6 +1,6 @@
 package com.wossha.auth.models.entity;
 
-public class Usuario {
+public class LoginUser {
 	
 	private Long id;
 	private String username;
