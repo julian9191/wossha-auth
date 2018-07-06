@@ -3,7 +3,6 @@ package com.wossha.auth.models.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.skife.jdbi.v2.IDBI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,20 +14,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.wossha.auth.models.dao.UserDao;
 import com.wossha.auth.models.dao.UserRecord;
+import com.wossha.auth.models.repository.UserRepository;
 
-//import com.bolsadeideas.springboot.app.models.dao.IUsuarioDao;
-//import com.bolsadeideas.springboot.app.models.entity.Role;
 
 @Service("jpaUserDetailsService")
 public class JdbiUserDetailsService implements UserDetailsService{
 	
 	@Autowired
-	private IDBI dbi;
-	
-	private UserDao userDao;
+	private UserRepository repo;
 	
 	private Logger logger = LoggerFactory.getLogger(UserDetailsService.class);
 	
@@ -36,14 +30,12 @@ public class JdbiUserDetailsService implements UserDetailsService{
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		userDao = dbi.onDemand(UserDao.class);
-        List<UserRecord> users = userDao.findByUsername(username);
+        UserRecord user = repo.findByUsername(username);
        
-        if(users.isEmpty()) {
-        	logger.error("Error en el Login: no existe el usuario '" + username + "' en el sistema!");
-        	throw new UsernameNotFoundException("Username: " + username + " no existe en el sistema!");
+        if(user == null) {
+        	logger.error("Login error: the user '" + username + "' doesn't exists");
+        	throw new UsernameNotFoundException("Username: " + username + " doesn't exists");
         }
-        UserRecord user = users.get(0);
         
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("admin"));
@@ -53,11 +45,11 @@ public class JdbiUserDetailsService implements UserDetailsService{
         }
         
         if(authorities.isEmpty()) {
-        	logger.error("Error en el Login: Usuario '" + username + "' no tiene roles asignados!");
-        	throw new UsernameNotFoundException("Error en el Login: usuario '" + username + "' no tiene roles asignados!");
+        	logger.error("Login error: the user'" + username + "' doesn't have assigned roles");
+        	throw new UsernameNotFoundException("Login error: the user '" + username + "' doesn't have assigned roles");
         }
         
-		return new User(user.getUsername(), user.getPassword(), true/*user.getEnabled()*/, true, true, true, authorities);
+		return new User(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
 	}
 
 }

@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.wossha.auth.models.repository.UserRepository;
+
 @SpringBootApplication
 public class WosshaAuthApplication implements CommandLineRunner{
 	
@@ -41,6 +43,13 @@ public class WosshaAuthApplication implements CommandLineRunner{
 	public DBI dbi(DataSource dataSource) {
 	    synchronized (DBI.class) {
 	        return new DBI(dataSource);
+	    }
+	}
+	
+	@Bean
+	public UserRepository userRpository() {
+	    synchronized (UserRepository.class) {
+	        return new UserRepository();
 	    }
 	}
 	

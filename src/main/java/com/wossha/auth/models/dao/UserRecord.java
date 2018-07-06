@@ -1,9 +1,8 @@
 package com.wossha.auth.models.dao;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class UserRecord  implements Serializable{
+public class UserRecord{
 
 	private Long id;
 	private String username;
@@ -15,12 +14,13 @@ public class UserRecord  implements Serializable{
     private List<String> roles;
     
     
-	public UserRecord(String username, String password, String firstName, String lastName, String email, List<String> roles) {
+	public UserRecord(String username, String password, String firstName, String lastName, String email, Boolean enabled, List<String> roles) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.enabled = enabled;
 		this.roles = roles;
 	}
 	
@@ -82,8 +82,4 @@ public class UserRecord  implements Serializable{
 		this.roles = roles;
 	}
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 }

@@ -21,6 +21,7 @@ public class UserMapperJdbi implements ResultSetMapper<UserRecord> {
                     r.getString("FIRST_NAME"),
                     r.getString("LAST_NAME"),
                     r.getString("EMAIL"),
+                    r.getBoolean("ENABLED"),
                     new ArrayList<String>()
             );
         }
