@@ -1,26 +1,30 @@
 package com.wossha.auth.models.dao;
 
 import java.util.List;
+import java.sql.Timestamp;
 
 public class UserRecord{
 
-	private Long id;
 	private String username;
 	private String password;
 	private Boolean enabled;
     private String firstName;
     private String lastName;
+    private String gender;
     private String email;
+    private Timestamp birthday;
     private List<String> roles;
     
     
-	public UserRecord(String username, String password, String firstName, String lastName, String email, Boolean enabled, List<String> roles) {
+	public UserRecord(String username, String password, String firstName, String lastName, String gender, String email, Boolean enabled, Timestamp birthday, List<String> roles) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.gender = gender;
 		this.email = email;
 		this.enabled = enabled;
+		this.birthday = birthday;
 		this.roles = roles;
 	}
 	
@@ -58,14 +62,6 @@ public class UserRecord{
 		this.email = email;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Boolean getEnabled() {
 		return enabled;
 	}
@@ -81,5 +77,23 @@ public class UserRecord{
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public Timestamp getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Timestamp birthday) {
+		this.birthday = birthday;
+	}
+	
+	
 	
 }

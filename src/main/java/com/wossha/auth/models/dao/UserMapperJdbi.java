@@ -20,8 +20,10 @@ public class UserMapperJdbi implements ResultSetMapper<UserRecord> {
                     r.getString("PASSWORD"),
                     r.getString("FIRST_NAME"),
                     r.getString("LAST_NAME"),
+                    r.getString("GENDER"),
                     r.getString("EMAIL"),
                     r.getBoolean("ENABLED"),
+                    r.getTimestamp("BIRTHDAY"),
                     new ArrayList<String>()
             );
         }
