@@ -13,10 +13,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RegisterMapper(UserMapperJdbi.class)
 public abstract  class UserDao {
-
+	
+	//SELECTS--------------------------------------------------------------------------------------------------------------------------------------
     @SqlQuery("SELECT * FROM TWSS_USERS u JOIN TWSS_USERS_X_ROLES uxr ON u.USERNAME = uxr.USERNAME WHERE u.USERNAME = :username")
-    public abstract List<UserRecord> findByUsername(@Bind("username") String username);
+    public abstract List<UserRecord> findCompleteByUsername(@Bind("username") String username);
     
+    @SqlQuery("SELECT * FROM TWSS_USERS u WHERE u.USERNAME = :username")
+    public abstract UserRecord findByUsername(@Bind("username") String username);
+    
+    
+    //INSERTS--------------------------------------------------------------------------------------------------------------------------------------
     @SqlUpdate("Insert into TWSS_USERS (USERNAME,PASSWORD,FIRST_NAME,LAST_NAME,EMAIL,GENDER,BIRTHDAY) values (:user.username, :user.password, :user.firstName, :user.lastName, :user.email, :user.gender, :user.birthday)")
     public abstract void addUser(@BindBean("user") UserRecord user);
     

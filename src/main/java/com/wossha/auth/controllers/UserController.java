@@ -34,8 +34,12 @@ public class UserController {
 		@PostMapping(value = "/register-user")
 		public @ResponseBody ResponseEntity<HashMap<String, String>> registerUser(@RequestBody UserRecord user) {
 			try {
-				repo.addUser(user);
-				return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El usuario se ha registrado correctamente"),HttpStatus.OK);
+				UserRecord RegistereddUser = repo.findUserByUsername(user.getUsername());
+				if(RegistereddUser==null) {
+					repo.addUser(user);
+					return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El usuario se ha registrado correctamente"),HttpStatus.OK);
+				}
+				return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El nombre de usuario "+user.getUsername()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente"),HttpStatus.INTERNAL_SERVER_ERROR);
 			}catch (Exception e) {
 				e.printStackTrace();
 				return new ResponseEntity<HashMap<String, String>>(wrapMessaje("Ha ocurrido un error al intentar registrar el usuario"),HttpStatus.INTERNAL_SERVER_ERROR);

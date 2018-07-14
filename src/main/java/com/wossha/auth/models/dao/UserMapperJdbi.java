@@ -27,7 +27,10 @@ public class UserMapperJdbi implements ResultSetMapper<UserRecord> {
                     new ArrayList<String>()
             );
         }
-    	user.getRoles().add(r.getString("ROLE_NAME"));
+    	try {
+    		user.getRoles().add(r.getString("ROLE_NAME"));
+    	}catch (SQLException e) {}
+    	
     	return user;
     }
 }

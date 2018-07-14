@@ -20,13 +20,18 @@ public class UserRepository implements Repository<UserRecord> {
 	
 	private UserDao userDao;
     
-	public UserRecord findByUsername(String username){
+	public UserRecord findCompleteByUsername(String username){
 		userDao = dbi.onDemand(UserDao.class);
-        List<UserRecord> users = userDao.findByUsername(username);
+        List<UserRecord> users = userDao.findCompleteByUsername(username);
         if(!users.isEmpty()) {
         	return users.get(0);
         }
 		return null;
+	}
+	
+    public UserRecord findUserByUsername(String username) {
+    	userDao = dbi.onDemand(UserDao.class);
+    	return userDao.findByUsername(username);
 	}
 	
 
@@ -39,6 +44,7 @@ public class UserRepository implements Repository<UserRecord> {
         
         userDao.close();
     }
+    
 
     @Override
     public String remove(UserRecord user) {

@@ -30,7 +30,7 @@ public class JdbiUserDetailsService implements UserDetailsService{
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-        UserRecord user = repo.findByUsername(username);
+        UserRecord user = repo.findCompleteByUsername(username);
        
         if(user == null) {
         	logger.error("Login error: the user '" + username + "' doesn't exists");
