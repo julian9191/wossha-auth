@@ -1,4 +1,4 @@
-package com.wossha.auth.models.dao;
+package com.wossha.auth.models.dao.user;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
@@ -22,6 +22,8 @@ public class UserMapperJdbi implements ResultSetMapper<UserRecord> {
                     r.getString("LAST_NAME"),
                     r.getString("GENDER"),
                     r.getString("EMAIL"),
+                    r.getInt("COUNTRY_ID"),
+                    r.getString("ABOUT"),
                     r.getBoolean("ENABLED"),
                     r.getTimestamp("BIRTHDAY"),
                     new ArrayList<String>()

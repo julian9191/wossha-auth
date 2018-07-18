@@ -1,4 +1,4 @@
-package com.wossha.auth.models.dao;
+package com.wossha.auth.models.dao.user;
 
 import java.util.List;
 
@@ -21,9 +21,12 @@ public abstract  class UserDao {
     @SqlQuery("SELECT * FROM TWSS_USERS u WHERE u.USERNAME = :username")
     public abstract UserRecord findByUsername(@Bind("username") String username);
     
+    @SqlQuery("SELECT * FROM TWSS_USERS u WHERE u.USERNAME = :username OR u.EMAIL = :email")
+    public abstract UserRecord findByUsernameOrEmail(@Bind("username") String username, @Bind("email") String email);
+    
     
     //INSERTS--------------------------------------------------------------------------------------------------------------------------------------
-    @SqlUpdate("Insert into TWSS_USERS (USERNAME,PASSWORD,FIRST_NAME,LAST_NAME,EMAIL,GENDER,BIRTHDAY) values (:user.username, :user.password, :user.firstName, :user.lastName, :user.email, :user.gender, :user.birthday)")
+    @SqlUpdate("Insert into TWSS_USERS (USERNAME,PASSWORD,FIRST_NAME,LAST_NAME,EMAIL,COUNTRY_ID,GENDER,BIRTHDAY) values (:user.username, :user.password, :user.firstName, :user.lastName, :user.email, :user.country, :user.gender, :user.birthday)")
     public abstract void addUser(@BindBean("user") UserRecord user);
     
     @RegisterMapper(UserRoleMapperJdbi.class)

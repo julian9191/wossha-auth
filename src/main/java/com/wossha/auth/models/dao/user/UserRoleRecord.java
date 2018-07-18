@@ -1,4 +1,4 @@
-package com.wossha.auth.models.dao;
+package com.wossha.auth.models.dao.user;
 
 public class UserRoleRecord{
 	

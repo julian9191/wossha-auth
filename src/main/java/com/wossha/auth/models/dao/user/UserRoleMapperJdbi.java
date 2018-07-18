@@ -1,4 +1,4 @@
-package com.wossha.auth.models.dao;
+package com.wossha.auth.models.dao.user;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;

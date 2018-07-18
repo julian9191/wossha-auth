@@ -1,8 +1,8 @@
 package com.wossha.auth.models.repository;
 
-import com.wossha.auth.models.dao.UserDao;
-import com.wossha.auth.models.dao.UserRecord;
-import com.wossha.auth.models.dao.UserRoleRecord;
+import com.wossha.auth.models.dao.user.UserDao;
+import com.wossha.auth.models.dao.user.UserRecord;
+import com.wossha.auth.models.dao.user.UserRoleRecord;
 import com.wossha.auth.models.enums.RolesEnum;
 import java.util.List;
 
@@ -33,6 +33,11 @@ public class UserRepository implements Repository<UserRecord> {
     	userDao = dbi.onDemand(UserDao.class);
     	return userDao.findByUsername(username);
 	}
+    
+    public UserRecord findUserByUsernameOrEmail(String username, String email) {
+    	userDao = dbi.onDemand(UserDao.class);
+    	return userDao.findByUsernameOrEmail(username, email);
+	}
 	
 
     public void addUser(UserRecord user) {
@@ -61,5 +66,7 @@ public class UserRepository implements Repository<UserRecord> {
 	public String add(UserRecord entity) {
 		return null;
 	}
+
+	
 
 }
