@@ -81,6 +81,12 @@
             <version>2.62</version>
         </dependency>
         
+        <dependency>
+            <groupId>com.wossha.msbase</groupId>
+            <artifactId>wossha-msbase</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        
         
 	</dependencies>
 

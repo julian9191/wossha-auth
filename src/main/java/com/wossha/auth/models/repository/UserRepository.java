@@ -50,21 +50,21 @@ public class UserRepository implements Repository<UserRecord> {
         userDao.close();
     }
     
-
     @Override
-    public String remove(UserRecord user) {
-        return null;
+    public void update(UserRecord user) {
+    	userDao = dbi.onDemand(UserDao.class);
+    	userDao.update(user);
     }
 
     @Override
-    public UserRecord update(UserRecord user) {
-        return null;
+    public void remove(UserRecord user) {
+    	
     }
 
 
 	@Override
-	public String add(UserRecord entity) {
-		return null;
+	public void add(UserRecord entity) {
+		
 	}
 
 	

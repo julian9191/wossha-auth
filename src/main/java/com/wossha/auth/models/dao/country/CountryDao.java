@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public abstract  class CountryDao {
 	
 	//SELECTS--------------------------------------------------------------------------------------------------------------------------------------
-    @SqlQuery("SELECT * FROM TWSS_COUNTRIES")
+    @SqlQuery("SELECT * FROM TWSS_COUNTRIES ORDER BY NAME")
     public abstract List<CountryRecord> findAll();
     
     

@@ -1,6 +1,11 @@
 package com.wossha.auth.models.dao.user;
 
 import java.util.List;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 public class UserRecord{
@@ -14,7 +19,13 @@ public class UserRecord{
     private String email;
     private Integer country;
     private String about;
+    
+    // Formats output date when this DTO is passed through JSON
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    // Allows yyyy-MM-dd date to be passed into GET request in JSON
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Timestamp birthday;
+    
     private List<String> roles;
     
     
@@ -30,6 +41,17 @@ public class UserRecord{
 		this.enabled = enabled;
 		this.birthday = birthday;
 		this.roles = roles;
+	}
+	
+	public UserRecord(String username, String firstName, String lastName, String gender, String email, Integer country, String about, Timestamp birthday) {
+		this.username = username;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.email = email;
+		this.country = country;
+		this.about = about;
+		this.birthday = birthday;
 	}
 	
 	public UserRecord() {}

@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wossha.auth.models.dao.country.CountryRecord;
 import com.wossha.auth.models.repository.CountryRepository;
+import com.wossha.msbase.controllers.ControllerWrapper;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
-public class CountryController {
+public class CountryController extends ControllerWrapper{
 
 	/** Logger available to subclasses */
 	protected final Log logger = LogFactory.getLog(getClass());

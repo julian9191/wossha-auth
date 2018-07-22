@@ -14,25 +14,16 @@ public class UserMapperJdbi implements ResultSetMapper<UserRecord> {
     @Override
     public UserRecord map(int index, ResultSet r, StatementContext ctx) throws SQLException {
         
-    	if (index == 0) {
-    		user = new UserRecord(
-                    r.getString("USERNAME"),
-                    r.getString("PASSWORD"),
-                    r.getString("FIRST_NAME"),
-                    r.getString("LAST_NAME"),
-                    r.getString("GENDER"),
-                    r.getString("EMAIL"),
-                    r.getInt("COUNTRY_ID"),
-                    r.getString("ABOUT"),
-                    r.getBoolean("ENABLED"),
-                    r.getTimestamp("BIRTHDAY"),
-                    new ArrayList<String>()
-            );
-        }
-    	try {
-    		user.getRoles().add(r.getString("ROLE_NAME"));
-    	}catch (SQLException e) {}
-    	
-    	return user;
+		return new UserRecord(
+                r.getString("USERNAME"),
+                r.getString("FIRST_NAME"),
+                r.getString("LAST_NAME"),
+                r.getString("GENDER"),
+                r.getString("EMAIL"),
+                r.getInt("COUNTRY_ID"),
+                r.getString("ABOUT"),
+                r.getTimestamp("BIRTHDAY")
+        );
+        
     }
 }

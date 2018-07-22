@@ -20,19 +20,19 @@ public class CountryRepository implements Repository<CountryRecord> {
 	}
 
     @Override
-    public String remove(CountryRecord user) {
-        return null;
+    public void remove(CountryRecord user) {
+        
     }
 
     @Override
-    public CountryRecord update(CountryRecord user) {
-        return null;
+    public void update(CountryRecord user) {
+        
     }
 
 
 	@Override
-	public String add(CountryRecord entity) {
-		return null;
+	public void add(CountryRecord entity) {
+		
 	}
 
 }

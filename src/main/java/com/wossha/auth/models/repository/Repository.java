@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface Repository<T> {
 
-    String add(T entity);
+    void add(T entity);
 
-    String remove(T entity);
+    void remove(T entity);
 
-    T update(T entity);
+    void update(T entity);
 
 }
