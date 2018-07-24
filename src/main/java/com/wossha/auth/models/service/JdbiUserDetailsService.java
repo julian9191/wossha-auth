@@ -1,5 +1,7 @@
 package com.wossha.auth.models.service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -50,7 +51,16 @@ public class JdbiUserDetailsService implements UserDetailsService{
         	throw new UsernameNotFoundException("Login error: the user '" + username + "' doesn't have assigned roles");
         }
         
-		return new User(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
+        UserSessionInfo userSesionInfo =  new UserSessionInfo(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
+        try {
+			userSesionInfo.setFirstName(URLEncoder.encode(user.getFirstName(), "UTF-8"));
+			userSesionInfo.setLastName(URLEncoder.encode(user.getLastName(), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        
+        
+		return userSesionInfo;
 	}
 
 }

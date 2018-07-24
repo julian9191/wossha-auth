@@ -48,7 +48,7 @@ public abstract  class UserDao {
     //UPDATES----------------------------------------------------------------------------------------------------------------------------------------
     
     @RegisterMapper(UserMapperJdbi.class)
-    @SqlUpdate("UPDATE TWSS_USERS SET FIRST_NAME=:user.firstName, LAST_NAME=:user.lastName, EMAIL=:user.email, BIRTHDAY=:user.birthday, ABOUT=:user.about, COUNTRY_ID=:user.country, MODIFIED=SYSDATE WHERE USERNAME=:user.username")
+    @SqlUpdate("UPDATE TWSS_USERS SET FIRST_NAME=:user.firstName, LAST_NAME=:user.lastName, EMAIL=:user.email, BIRTHDAY=:user.birthday, ABOUT=:user.about, COUNTRY_ID=:user.country, GENDER=:user.gender, MODIFIED=SYSDATE WHERE USERNAME=:user.username")
     public abstract void update(@BindBean("user") UserRecord user);
 
     
