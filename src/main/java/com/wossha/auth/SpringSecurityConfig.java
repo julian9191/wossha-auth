@@ -9,6 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.wossha.auth.filter.JWTAuthenticationFilter;
+import com.wossha.auth.filter.JWTAuthorizationFilter;
 import com.wossha.auth.models.service.JdbiUserDetailsService;
 import com.wossha.auth.service.JWTService;
 
@@ -27,12 +28,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/users/register-user", "/users/{username}", "/users/", "/countries").permitAll()
+		http.authorizeRequests().antMatchers("/", "/css/**", "/js/**", "/images/**", "/users/register-user").permitAll()
 		.anyRequest().authenticated()
 		.and()
 		.cors().and()
 		.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtService))
-		//.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtService))
+		.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtService))
 		.csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
