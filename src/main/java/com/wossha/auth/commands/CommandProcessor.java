@@ -23,7 +23,7 @@ import com.wossha.msbase.exceptions.TechnicalException;
 @RestController
 public class CommandProcessor extends ControllerWrapper{
 
-    private Logger LOGGER = LoggerFactory.getLogger(CommandProcessor.class);
+    private Logger logger = LoggerFactory.getLogger(CommandProcessor.class);
     private final static ObjectMapper mapper = new ObjectMapper();
     
     @Autowired
@@ -42,6 +42,8 @@ public class CommandProcessor extends ControllerWrapper{
 			ICommand command = cs.deserialize(json);
 
             String message = command.execute();
+            
+            logger.debug("command generated: "+json);
 
             return new ResponseEntity<HashMap<String, String>>(wrapMessaje(message),HttpStatus.OK);
         } catch (TechnicalException e) {
