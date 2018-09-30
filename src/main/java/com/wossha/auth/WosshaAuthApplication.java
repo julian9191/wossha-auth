@@ -9,10 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.wossha.auth.commands.modifyuser.ModifyUserCommand;
-import com.wossha.auth.infrastructure.repositories.CountryRepository;
-import com.wossha.auth.infrastructure.repositories.UserRepository;
-
 @SpringBootApplication
 public class WosshaAuthApplication implements CommandLineRunner {
 
