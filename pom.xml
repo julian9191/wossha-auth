@@ -85,7 +85,19 @@
             <groupId>com.wossha.msbase</groupId>
             <artifactId>wossha-msbase</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+            	<exclusion>
+            		<groupId>com.wossha.jsonEvents</groupId>
+	         		<artifactId>wossha-jsonEvents</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
+        
+        <dependency>
+	         <groupId>com.wossha.jsonEvents</groupId>
+	         <artifactId>wossha-jsonEvents</artifactId>
+	         <version>0.0.1-SNAPSHOT</version>
+	     </dependency>
         
         
 	</dependencies>

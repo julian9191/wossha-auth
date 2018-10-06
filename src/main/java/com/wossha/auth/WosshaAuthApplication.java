@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication
 public class WosshaAuthApplication implements CommandLineRunner {
 
+	public final static String APP_NAME="WOSSHA-AUTH";
+	
 	public static void main(String[] args) {
 		SpringApplication.run(WosshaAuthApplication.class, args);
 		System.out.println("APPLICATION STARTED");

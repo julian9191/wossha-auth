@@ -1,7 +1,7 @@
 package com.wossha.auth.commands.modifyuser.model;
 
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
-import com.wossha.msbase.controllers.commands.CommandModel;
+import com.wossha.msbase.commands.CommandModel;
 
 public class ModifyUser extends CommandModel{
 	private String commandName;

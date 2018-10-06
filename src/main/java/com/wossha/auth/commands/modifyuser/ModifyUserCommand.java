@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 
 import com.wossha.auth.commands.modifyuser.model.ModifyUser;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
-import com.wossha.msbase.controllers.commands.ICommand;
+import com.wossha.msbase.commands.CommandResult;
+import com.wossha.msbase.commands.ICommand;
 import com.wossha.msbase.exceptions.BusinessException;
 import com.wossha.msbase.exceptions.TechnicalException;
 
@@ -13,7 +14,7 @@ import com.wossha.msbase.exceptions.TechnicalException;
 public class ModifyUserCommand implements ICommand<ModifyUser>{
 	
 	private ModifyUser data;
-	private String user;
+	private String username;
 	
 	@Autowired
 	private UserRepository repo;
@@ -35,10 +36,13 @@ public class ModifyUserCommand implements ICommand<ModifyUser>{
 	}
 
 	@Override
-	public String execute() throws BusinessException, TechnicalException {
+	public CommandResult execute() throws BusinessException, TechnicalException {
+		
+		CommandResult result = new CommandResult();
 		try {
 			repo.update(data.getUser());
-			return "La modificación de datos se ha realizado correctamente";
+			result.setMessage("La modificación de datos se ha realizado correctamente");
+			return result;
 		}catch (Exception e) {
 			e.printStackTrace();
 			throw new TechnicalException("Ha ocurrido un error al intentar modificar el usuario");
@@ -46,8 +50,8 @@ public class ModifyUserCommand implements ICommand<ModifyUser>{
 	}
 
 	@Override
-	public void setUser(String user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }
