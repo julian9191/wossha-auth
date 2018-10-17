@@ -1,4 +1,4 @@
-package com.wossha.auth.infrastructure.dao.user;
+package com.wossha.auth.commands.modifyuser.model;
 
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.wossha.msbase.models.PictureFileDTO;
 import java.sql.Timestamp;
 
-public class UserRecord{
+public class UserDTO{
 
 	private String username;
 	private String password;
@@ -17,8 +17,8 @@ public class UserRecord{
     private String email;
     private Integer country;
     private String about;
-    private String profilePicture;
-    private String coverPicture;
+    private PictureFileDTO profilePicture;
+    private PictureFileDTO coverPicture;
     
     // Formats output date when this DTO is passed through JSON
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -29,7 +29,7 @@ public class UserRecord{
     private List<String> roles;
     
     
-	public UserRecord(String username, String password, String firstName, String lastName, String gender, String email, Integer country, String about, Boolean enabled, Timestamp birthday, List<String> roles) {
+	public UserDTO(String username, String password, String firstName, String lastName, String gender, String email, Integer country, String about, Boolean enabled, Timestamp birthday, List<String> roles) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -43,7 +43,7 @@ public class UserRecord{
 		this.roles = roles;
 	}
 	
-	public UserRecord(String username, String firstName, String lastName, String gender, String email, Integer country, String about, Timestamp birthday, String profilePicture, String coverPicture) {
+	public UserDTO(String username, String firstName, String lastName, String gender, String email, Integer country, String about, Timestamp birthday) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -52,11 +52,9 @@ public class UserRecord{
 		this.country = country;
 		this.about = about;
 		this.birthday = birthday;
-		this.profilePicture = profilePicture;
-		this.coverPicture = coverPicture;
 	}
 	
-	public UserRecord() {}
+	public UserDTO() {}
 	
 	
 	public String getUsername() {
@@ -138,22 +136,21 @@ public class UserRecord{
 		this.about = about;
 	}
 
-	public String getProfilePicture() {
+	public PictureFileDTO getProfilePicture() {
 		return profilePicture;
 	}
 
-	public void setProfilePicture(String profilePicture) {
+	public void setProfilePicture(PictureFileDTO profilePicture) {
 		this.profilePicture = profilePicture;
 	}
 
-	public String getCoverPicture() {
+	public PictureFileDTO getCoverPicture() {
 		return coverPicture;
 	}
 
-	public void setCoverPicture(String coverPicture) {
+	public void setCoverPicture(PictureFileDTO coverPicture) {
 		this.coverPicture = coverPicture;
 	}
-	
 	
 	
 }

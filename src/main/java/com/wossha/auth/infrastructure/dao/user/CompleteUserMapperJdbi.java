@@ -3,6 +3,8 @@ package com.wossha.auth.infrastructure.dao.user;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
+import com.wossha.auth.commands.modifyuser.model.UserDTO;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;

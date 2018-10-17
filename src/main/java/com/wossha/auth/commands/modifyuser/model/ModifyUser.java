@@ -1,12 +1,11 @@
 package com.wossha.auth.commands.modifyuser.model;
 
-import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.msbase.commands.CommandModel;
 
 public class ModifyUser extends CommandModel{
 	private String commandName;
     private String username;
-    private UserRecord user;
+    private UserDTO user;
     
 	
 	public String getCommandName() {
@@ -21,10 +20,10 @@ public class ModifyUser extends CommandModel{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public UserRecord getUser() {
+	public UserDTO getUser() {
 		return user;
 	}
-	public void setUser(UserRecord user) {
+	public void setUser(UserDTO user) {
 		this.user = user;
 	}
 	

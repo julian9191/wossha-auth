@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
 
@@ -32,7 +31,7 @@ public class JdbiUserDetailsService implements UserDetailsService{
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-        UserRecord user = repo.findCompleteByUsername(username);
+		UserRecord user = repo.findCompleteByUsername(username);
        
         if(user == null) {
         	logger.error("Login error: the user '" + username + "' doesn't exists");

@@ -1,6 +1,5 @@
 package com.wossha.auth.infrastructure.dao.user;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.skife.jdbi.v2.sqlobject.Bind;
@@ -21,7 +20,7 @@ public abstract  class UserDao {
     public abstract List<UserRecord> findCompleteByUsername(@Bind("username") String username);
     
 	@RegisterMapper(UserMapperJdbi.class)
-    @SqlQuery("SELECT USERNAME,FIRST_NAME,LAST_NAME,EMAIL,GENDER,BIRTHDAY,ABOUT,COUNTRY_ID FROM TWSS_USERS u WHERE u.USERNAME = :username")
+    @SqlQuery("SELECT USERNAME,FIRST_NAME,LAST_NAME,EMAIL,GENDER,BIRTHDAY,ABOUT,COUNTRY_ID,PROFILE_PICTURE,COVER_PICTURE FROM TWSS_USERS u WHERE u.USERNAME = :username")
     public abstract UserRecord findByUsername(@Bind("username") String username);
     
 	@RegisterMapper(UserMapperJdbi.class)
@@ -48,7 +47,7 @@ public abstract  class UserDao {
     //UPDATES----------------------------------------------------------------------------------------------------------------------------------------
     
     @RegisterMapper(UserMapperJdbi.class)
-    @SqlUpdate("UPDATE TWSS_USERS SET FIRST_NAME=:user.firstName, LAST_NAME=:user.lastName, EMAIL=:user.email, BIRTHDAY=:user.birthday, ABOUT=:user.about, COUNTRY_ID=:user.country, GENDER=:user.gender, MODIFIED=SYSDATE WHERE USERNAME=:user.username")
+    @SqlUpdate("UPDATE TWSS_USERS SET FIRST_NAME=:user.firstName, LAST_NAME=:user.lastName, EMAIL=:user.email, BIRTHDAY=:user.birthday, ABOUT=:user.about, COUNTRY_ID=:user.country, GENDER=:user.gender, MODIFIED=SYSDATE, PROFILE_PICTURE=:user.profilePicture, COVER_PICTURE=:user.coverPicture WHERE USERNAME=:user.username")
     public abstract void update(@BindBean("user") UserRecord user);
 
     

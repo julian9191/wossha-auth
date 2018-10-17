@@ -2,7 +2,6 @@ package com.wossha.auth.infrastructure.dao.user;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,7 +21,9 @@ public class UserMapperJdbi implements ResultSetMapper<UserRecord> {
                 r.getString("EMAIL"),
                 r.getInt("COUNTRY_ID"),
                 r.getString("ABOUT"),
-                r.getTimestamp("BIRTHDAY")
+                r.getTimestamp("BIRTHDAY"),
+                r.getString("PROFILE_PICTURE"),
+                r.getString("COVER_PICTURE")
         );
         
     }
