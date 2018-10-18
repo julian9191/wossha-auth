@@ -67,7 +67,7 @@ public class ModifyUserCommand implements ICommand<ModifyUser>{
 				
 				pictureEvent = generateSavePictureEvent(uuidPicture,
 						data.getUser().getProfilePicture().getFilename(), data.getUser().getProfilePicture().getFiletype(),
-						data.getUser().getProfilePicture().getSize(), data.getUser().getProfilePicture().getValue(), PictureTypesEnum.PROFILE_PICTURE.name());
+						data.getUser().getProfilePicture().getSize(), data.getUser().getProfilePicture().getValue(), PictureTypesEnum.PROFILE_PICTURE.name(), user.getProfilePicture());
 				
 				result.addEvent(pictureEvent);
 			}else {
@@ -81,8 +81,8 @@ public class ModifyUserCommand implements ICommand<ModifyUser>{
 				newUser.setCoverPicture(uuidPicture);
 				
 				pictureEvent = generateSavePictureEvent(uuidPicture,
-						data.getUser().getProfilePicture().getFilename(), data.getUser().getProfilePicture().getFiletype(),
-						data.getUser().getProfilePicture().getSize(), data.getUser().getProfilePicture().getValue(), PictureTypesEnum.COVER_PICTURE.name());
+						data.getUser().getCoverPicture().getFilename(), data.getUser().getCoverPicture().getFiletype(),
+						data.getUser().getCoverPicture().getSize(), data.getUser().getCoverPicture().getValue(), PictureTypesEnum.COVER_PICTURE.name(), user.getCoverPicture());
 				
 				result.addEvent(pictureEvent);
 			}else {
@@ -99,9 +99,9 @@ public class ModifyUserCommand implements ICommand<ModifyUser>{
 	}
 	
 	private SavePictureEvent generateSavePictureEvent(String uuidPicture, String picName, String fileType,
-			Integer fileSize, String value, String type) {
+			Integer fileSize, String value, String type, String uuidPictureToRemove) {
 		Message message = new Message(uuidPicture, picName, fileType, type, fileSize,
-				value);
+				value, uuidPictureToRemove);
 		SavePictureEvent event = new SavePictureEvent(WosshaAuthApplication.APP_NAME, this.username, message);
 		return event;
 	}

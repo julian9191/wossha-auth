@@ -1,5 +1,7 @@
 package com.wossha.auth.resources;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,8 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
+import com.wossha.auth.infrastructure.services.model.UserSessionInfo;
 import com.wossha.msbase.controllers.ControllerWrapper;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
@@ -61,4 +67,21 @@ public class UserController extends ControllerWrapper{
 			return t;
 		}
 		
+		@GetMapping(value = "/logged-user-info")
+		public @ResponseBody UserSessionInfo getLoggedUserInfo() {
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			String username = auth.getPrincipal().toString();
+			
+			UserRecord user = repo.findCompleteByUsername(username);
+			
+			UserSessionInfo userSesionInfo = null;
+	        try {
+	        	userSesionInfo = new UserSessionInfo(URLEncoder.encode(user.getFirstName(), "UTF-8"), URLEncoder.encode(user.getLastName(), "UTF-8"), user.getProfilePicture());
+	        } catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+	        
+			return userSesionInfo;
+		}
 }

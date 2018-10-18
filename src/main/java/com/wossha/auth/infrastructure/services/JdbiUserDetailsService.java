@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
+import com.wossha.auth.infrastructure.services.model.SessionInfo;
+import com.wossha.auth.infrastructure.services.model.UserSessionInfo;
 
 
 @Service("jpaUserDetailsService")
@@ -50,10 +52,11 @@ public class JdbiUserDetailsService implements UserDetailsService{
         	throw new UsernameNotFoundException("Login error: the user '" + username + "' doesn't have assigned roles");
         }
         
-        UserSessionInfo userSesionInfo =  new UserSessionInfo(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
+        SessionInfo userSesionInfo =  new SessionInfo(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
         try {
-			userSesionInfo.setFirstName(URLEncoder.encode(user.getFirstName(), "UTF-8"));
-			userSesionInfo.setLastName(URLEncoder.encode(user.getLastName(), "UTF-8"));
+        	UserSessionInfo userSessionInfo = new UserSessionInfo(URLEncoder.encode(user.getFirstName(), "UTF-8"), URLEncoder.encode(user.getLastName(), "UTF-8"), user.getProfilePicture());
+			userSesionInfo.setUserSessionInfo(userSessionInfo);
+
         } catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

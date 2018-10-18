@@ -28,7 +28,8 @@ public class CompleteUserMapperJdbi implements ResultSetMapper<UserRecord> {
                     r.getString("ABOUT"),
                     r.getBoolean("ENABLED"),
                     r.getTimestamp("BIRTHDAY"),
-                    new ArrayList<String>()
+                    new ArrayList<String>(),
+                    r.getString("PROFILE_PICTURE")
             );
         }
     	try {

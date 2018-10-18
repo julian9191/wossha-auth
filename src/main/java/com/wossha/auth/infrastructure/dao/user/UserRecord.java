@@ -29,7 +29,7 @@ public class UserRecord{
     private List<String> roles;
     
     
-	public UserRecord(String username, String password, String firstName, String lastName, String gender, String email, Integer country, String about, Boolean enabled, Timestamp birthday, List<String> roles) {
+	public UserRecord(String username, String password, String firstName, String lastName, String gender, String email, Integer country, String about, Boolean enabled, Timestamp birthday, List<String> roles, String profilePicture) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -41,6 +41,7 @@ public class UserRecord{
 		this.enabled = enabled;
 		this.birthday = birthday;
 		this.roles = roles;
+		this.profilePicture = profilePicture;
 	}
 	
 	public UserRecord(String username, String firstName, String lastName, String gender, String email, Integer country, String about, Timestamp birthday, String profilePicture, String coverPicture) {
