@@ -12,12 +12,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wossha.auth.commands.CommandSerializers;
 import com.wossha.auth.commands.modifyuser.ModifyUserCommand;
 import com.wossha.auth.commands.modifyuser.ModifyUserSerializer;
+import com.wossha.auth.infrastructure.jms.EventSerializers;
+import com.wossha.auth.infrastructure.jms.userConnectionEvent.UserConnectionEventSerializer;
 import com.wossha.auth.infrastructure.repositories.CountryRepository;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
+import com.wossha.json.events.events.pictures.SavePictureEvent.SavePictureEvent;
+import com.wossha.json.events.events.social.userConnectedEvent.UserConnectionEvent;
 
 @Configuration
 public class BeansConfig {
 	
+	//--REPOSITORIES-------------------------------------------
 	@Bean
 	public UserRepository userRpository() {
 			return new UserRepository();
@@ -28,15 +33,34 @@ public class BeansConfig {
 		return new CountryRepository();
 	}
 
+	
+	//-COMMANDS-----------------------------------------------
+	
 	@Bean
 	public ModifyUserCommand modifyUserCommand() {
 		return new ModifyUserCommand();
 	}
 	
+	//-COMMAND SERIALIZERS----------------------------------------------
 	@Bean
 	public ModifyUserSerializer modifyUserSerializer() {
 		return new ModifyUserSerializer();
 	}
+	
+	//EVENTS----------------------------------------------------------------
+	@Bean
+	public UserConnectionEvent userConnectionEvent() {
+		return new UserConnectionEvent();
+	}
+	
+	//EVENTS LISTENERS----------------------------------------------------------
+	@Bean
+	public UserConnectionEventSerializer userConnectionEventSerializer() {
+		return new UserConnectionEventSerializer();
+	}
+	
+	
+	//-------------------------------------------------------------------------
 	
 	@Bean
 	public ObjectMapper objectMapper() {
@@ -53,6 +77,14 @@ public class BeansConfig {
 		cs.setModifyUserSerializer(modifyUserSerializer());
 		cs.initMapper();
 		return cs;
+	}
+	
+	@Bean
+	public EventSerializers eventSerializers() {
+		EventSerializers es = new EventSerializers();
+		es.setUserConnectedEventSerializer(userConnectionEventSerializer());;
+		es.initMapper();
+		return es;
 	}
 	
 	@Bean

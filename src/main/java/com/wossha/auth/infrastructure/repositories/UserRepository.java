@@ -1,10 +1,11 @@
 package com.wossha.auth.infrastructure.repositories;
 
+import com.wossha.auth.dto.ChatUserStatus;
+import com.wossha.auth.dto.UserSearchDTO;
 import com.wossha.auth.infrastructure.dao.user.UserDao;
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.dao.user.UserRoleRecord;
 import com.wossha.auth.infrastructure.enums.RolesEnum;
-
 import java.util.List;
 
 import org.skife.jdbi.v2.IDBI;
@@ -39,6 +40,11 @@ public class UserRepository implements Repository<UserRecord> {
     	userDao = dbi.onDemand(UserDao.class);
     	return userDao.findByUsernameOrEmail(username, email);
 	}
+    
+    public List<ChatUserStatus> getChatFriendsStatus(List<String> usernames) {
+    	userDao = dbi.onDemand(UserDao.class); 
+    	return userDao.getChatFriendsStatus(dbi, usernames);
+	}
 	
 
     public void addUser(UserRecord user) {
@@ -56,6 +62,17 @@ public class UserRepository implements Repository<UserRecord> {
     	userDao = dbi.onDemand(UserDao.class);
     	userDao.update(user);
     }
+    
+    public List<UserSearchDTO> searchUser(String word) {
+    	userDao = dbi.onDemand(UserDao.class);
+		word = "%" + word.toUpperCase() + "%";
+		return userDao.searchUser(word);
+	}
+    
+    public void updateOnlineStatus(String username, Integer status) {
+    	userDao = dbi.onDemand(UserDao.class);
+    	userDao.updateOnlineStatus(username, status);
+	}
 
     @Override
     public void remove(UserRecord user) {
@@ -67,7 +84,5 @@ public class UserRepository implements Repository<UserRecord> {
 	public void add(UserRecord entity) {
 		
 	}
-
-	
 
 }

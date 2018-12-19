@@ -3,6 +3,8 @@ package com.wossha.auth.resources;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.wossha.auth.dto.ChatUserStatus;
+import com.wossha.auth.dto.UserSearchDTO;
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
 import com.wossha.auth.infrastructure.services.model.UserSessionInfo;
@@ -35,53 +39,68 @@ public class UserController extends ControllerWrapper{
 	@Autowired
 	private UserRepository repo;
 	
-		@PostMapping(value = "/register-user")
-		public @ResponseBody ResponseEntity<HashMap<String, String>> registerUser(@RequestBody UserRecord user) {
-			user.setUsername(user.getUsername().toLowerCase());
-			user.setEmail(user.getEmail().toLowerCase());
-			try {
-				UserRecord RegisteredUser = repo.findUserByUsernameOrEmail(user.getUsername(), user.getEmail());
-				
-				if(RegisteredUser != null) {
-					if(RegisteredUser.getUsername().equals(user.getUsername())) {
-						return new ResponseEntity<HashMap<String, String>>(super.wrapMessaje("El nombre de usuario "+user.getUsername()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente"),HttpStatus.INTERNAL_SERVER_ERROR);
-					}
-					if(RegisteredUser.getEmail().equals(user.getEmail())) {
-						return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El email "+user.getEmail()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente"),HttpStatus.INTERNAL_SERVER_ERROR);
-					}
+	@PostMapping(value = "/register-user")
+	public @ResponseBody ResponseEntity<HashMap<String, String>> registerUser(@RequestBody UserRecord user) {
+		user.setUsername(user.getUsername().toLowerCase());
+		user.setEmail(user.getEmail().toLowerCase());
+		try {
+			UserRecord RegisteredUser = repo.findUserByUsernameOrEmail(user.getUsername(), user.getEmail());
+			
+			if(RegisteredUser != null) {
+				if(RegisteredUser.getUsername().equals(user.getUsername())) {
+					return new ResponseEntity<HashMap<String, String>>(super.wrapMessaje("El nombre de usuario "+user.getUsername()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente"),HttpStatus.INTERNAL_SERVER_ERROR);
 				}
-				
-				if(RegisteredUser==null) {
-					repo.addUser(user);
-					return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El usuario se ha registrado correctamente, ahora puede iniciar sesión"),HttpStatus.OK);
+				if(RegisteredUser.getEmail().equals(user.getEmail())) {
+					return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El email "+user.getEmail()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente"),HttpStatus.INTERNAL_SERVER_ERROR);
 				}
-			}catch (Exception e) {
-				e.printStackTrace();
 			}
-			return new ResponseEntity<HashMap<String, String>>(wrapMessaje("Ha ocurrido un error al intentar registrar el usuario"),HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-		@GetMapping(value = "/{username}")
-		public @ResponseBody UserRecord getUserByUsername(@PathVariable String username) {
-			UserRecord t = repo.findUserByUsername(username);
-			return t;
-		}
-		
-		@GetMapping(value = "/logged-user-info")
-		public @ResponseBody UserSessionInfo getLoggedUserInfo() {
 			
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			String username = auth.getPrincipal().toString();
-			
-			UserRecord user = repo.findCompleteByUsername(username);
-			
-			UserSessionInfo userSesionInfo = null;
-	        try {
-	        	userSesionInfo = new UserSessionInfo(URLEncoder.encode(user.getFirstName(), "UTF-8"), URLEncoder.encode(user.getLastName(), "UTF-8"), user.getProfilePicture());
-	        } catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			if(RegisteredUser==null) {
+				repo.addUser(user);
+				return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El usuario se ha registrado correctamente, ahora puede iniciar sesión"),HttpStatus.OK);
 			}
-	        
-			return userSesionInfo;
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
+		return new ResponseEntity<HashMap<String, String>>(wrapMessaje("Ha ocurrido un error al intentar registrar el usuario"),HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@GetMapping(value = "/search-user/{word}")
+	public @ResponseBody List<UserSearchDTO> searchUser(@PathVariable String word) {
+		List<UserSearchDTO> c = repo.searchUser(word);
+		return c;
+	}
+	
+	@GetMapping(value = "/{username}")
+	public @ResponseBody UserRecord getUserByUsername(@PathVariable String username) {
+		UserRecord t = repo.findUserByUsername(username);
+		return t;
+	}
+	
+	@GetMapping(value = "/logged-user-info")
+	public @ResponseBody UserSessionInfo getLoggedUserInfo() {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String username = auth.getPrincipal().toString();
+		
+		UserRecord user = repo.findCompleteByUsername(username);
+		
+		UserSessionInfo userSesionInfo = null;
+        try {
+        	userSesionInfo = new UserSessionInfo(URLEncoder.encode(user.getFirstName(), "UTF-8"), URLEncoder.encode(user.getLastName(), "UTF-8"), user.getProfilePicture());
+        } catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+        
+		return userSesionInfo;
+	}
+	
+	@PostMapping(value = "/chat-friends")
+	public @ResponseBody List<ChatUserStatus> getChatFriends(@RequestBody List<String> usernames) {
+		System.out.println(usernames.toString());
+		
+		List<ChatUserStatus> c = repo.getChatFriendsStatus(usernames); 
+		return c;
+	}
+	
 }

@@ -1,16 +1,26 @@
 package com.wossha.auth.infrastructure.dao.user;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.IDBI;
+import org.skife.jdbi.v2.Query;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.Transaction;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
+import org.skife.jdbi.v2.sqlobject.stringtemplate.UseStringTemplate3StatementLocator;
 import org.springframework.stereotype.Repository;
+import com.wossha.auth.dto.ChatUserStatus;
+import com.wossha.auth.dto.UserSearchDTO;
+import com.wossha.auth.infrastructure.dao.BaseDao;
 
 @Repository
+@UseStringTemplate3StatementLocator
 public abstract  class UserDao {
 	
 	//SELECTS--------------------------------------------------------------------------------------------------------------------------------------
@@ -27,6 +37,37 @@ public abstract  class UserDao {
     @SqlQuery("SELECT * FROM TWSS_USERS u WHERE u.USERNAME = :username OR u.EMAIL = :email")
     public abstract UserRecord findByUsernameOrEmail(@Bind("username") String username, @Bind("email") String email);
     
+	@RegisterMapper(UserSearchMapperJdbi.class)
+	@SqlQuery("SELECT USERNAME, CONCAT(FIRST_NAME, CONCAT(' ',LAST_NAME)) AS NAME, PROFILE_PICTURE "
+			+ "FROM TWSS_USERS WHERE upper(USERNAME) LIKE upper(:word) order by NAME FETCH FIRST 5 ROWS ONLY")
+    public abstract List<UserSearchDTO> searchUser(@Bind("word") String word);
+	
+	/*@RegisterMapper(ChatUserStatusMapperJdbi.class)
+	@SqlQuery("SELECT USERNAME, IS_ONLINE FROM TWSS_USERS WHERE USERNAME IN (<usernames>)")
+    public abstract List<ChatUserStatus> getChatFriendsStatus(@BindBean("usernames") List<String> usernames);*/
+	
+	
+	public List<ChatUserStatus> getChatFriendsStatus(IDBI dbi, List<String> usernames) {
+
+		BaseDao<ChatUserStatus> baseDao = new BaseDao<>();
+		String query = "SELECT USERNAME, CONCAT(CONCAT(FIRST_NAME, ' '), LAST_NAME) AS NAME, PROFILE_PICTURE, IS_ONLINE FROM WSSAUTHCXN1.TWSS_USERS "
+				+ "WHERE USERNAME IN (<usernames>)";
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("usernames", usernames);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();
+		@SuppressWarnings("unchecked")
+		Query<ChatUserStatus> q = h.createQuery(query).map(new ChatUserStatusMapperJdbi());
+
+		q = baseDao.addInClauseBind(q, typesBindMap);
+		List<ChatUserStatus> output = (List<ChatUserStatus>) q.list();
+
+		return output;
+	}
+	
+	
     
     //INSERTS--------------------------------------------------------------------------------------------------------------------------------------
     
@@ -49,6 +90,9 @@ public abstract  class UserDao {
     @RegisterMapper(UserMapperJdbi.class)
     @SqlUpdate("UPDATE TWSS_USERS SET FIRST_NAME=:user.firstName, LAST_NAME=:user.lastName, EMAIL=:user.email, BIRTHDAY=:user.birthday, ABOUT=:user.about, COUNTRY_ID=:user.country, GENDER=:user.gender, MODIFIED=SYSDATE, PROFILE_PICTURE=:user.profilePicture, COVER_PICTURE=:user.coverPicture WHERE USERNAME=:user.username")
     public abstract void update(@BindBean("user") UserRecord user);
+    
+    @SqlUpdate("UPDATE TWSS_USERS SET IS_ONLINE=:status WHERE USERNAME=:username")
+    public abstract void updateOnlineStatus(@Bind("username") String username, @Bind("status") int status);
 
     
     public abstract void close();
