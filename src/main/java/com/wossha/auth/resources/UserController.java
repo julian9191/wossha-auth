@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import com.wossha.auth.infrastructure.filters.UsernameInfoAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.wossha.auth.dto.ChatUserStatus;
@@ -80,7 +80,7 @@ public class UserController extends ControllerWrapper{
 	@GetMapping(value = "/logged-user-info")
 	public @ResponseBody UserSessionInfo getLoggedUserInfo() {
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UsernameInfoAuthenticationToken auth = (UsernameInfoAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
 		String username = auth.getPrincipal().toString();
 		
 		UserRecord user = repo.findCompleteByUsername(username);

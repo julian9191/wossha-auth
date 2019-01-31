@@ -1,6 +1,7 @@
 package com.wossha.auth.infrastructure.services;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,8 @@ public class JdbiUserDetailsService implements UserDetailsService{
         SessionInfo userSesionInfo =  new SessionInfo(user.getUsername(), user.getPassword(), user.getEnabled(), true, true, true, authorities);
         try {
         	UserSessionInfo userSessionInfo = new UserSessionInfo(URLEncoder.encode(user.getFirstName(), "UTF-8"), URLEncoder.encode(user.getLastName(), "UTF-8"), user.getProfilePicture());
-			userSesionInfo.setUserSessionInfo(userSessionInfo);
+			String prueba = URLDecoder.decode(user.getFirstName(), "UTF-8");
+        	userSesionInfo.setUserSessionInfo(userSessionInfo);
 
         } catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

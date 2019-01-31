@@ -27,6 +27,7 @@ import com.wossha.msbase.commands.ICommandSerializer;
 import com.wossha.msbase.controllers.ControllerWrapper;
 import com.wossha.msbase.exceptions.BusinessException;
 import com.wossha.msbase.exceptions.TechnicalException;
+import com.wossha.auth.infrastructure.filters.UsernameInfoAuthenticationToken;
 
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
@@ -56,7 +57,7 @@ public class CommandProcessor extends ControllerWrapper{
             @SuppressWarnings("rawtypes")
 			ICommand command = cs.deserialize(json);
 
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UsernameInfoAuthenticationToken auth = (UsernameInfoAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
     		String username = auth.getPrincipal().toString();
             command.setUsername(username);
             CommandResult result = command.execute();
