@@ -1,7 +1,7 @@
 package com.wossha.auth.infrastructure.repositories;
 
 import com.wossha.auth.dto.ChatUserStatus;
-import com.wossha.auth.dto.UserSearchDTO;
+import com.wossha.auth.dto.UserMinimumDTO;
 import com.wossha.auth.infrastructure.dao.user.UserDao;
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.dao.user.UserRoleRecord;
@@ -63,7 +63,7 @@ public class UserRepository implements Repository<UserRecord> {
     	userDao.update(user);
     }
     
-    public List<UserSearchDTO> searchUser(String word) {
+    public List<UserMinimumDTO> searchUser(String word) {
     	userDao = dbi.onDemand(UserDao.class);
 		word = "%" + word.toUpperCase() + "%";
 		return userDao.searchUser(word);
@@ -74,6 +74,11 @@ public class UserRepository implements Repository<UserRecord> {
     	userDao.updateOnlineStatus(username, status);
 	}
 
+    public List<UserMinimumDTO> getMinimumUsersInfo(List<String> usernames) {
+    	userDao = dbi.onDemand(UserDao.class);
+		return userDao.getMinimumUsersInfo(dbi, usernames);
+	}
+    
     @Override
     public void remove(UserRecord user) {
     	

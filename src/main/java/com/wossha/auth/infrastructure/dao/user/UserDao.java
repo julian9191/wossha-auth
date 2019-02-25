@@ -16,7 +16,7 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.sqlobject.stringtemplate.UseStringTemplate3StatementLocator;
 import org.springframework.stereotype.Repository;
 import com.wossha.auth.dto.ChatUserStatus;
-import com.wossha.auth.dto.UserSearchDTO;
+import com.wossha.auth.dto.UserMinimumDTO;
 import com.wossha.auth.infrastructure.dao.BaseDao;
 
 @Repository
@@ -37,14 +37,10 @@ public abstract  class UserDao {
     @SqlQuery("SELECT * FROM TWSS_USERS u WHERE u.USERNAME = :username OR u.EMAIL = :email")
     public abstract UserRecord findByUsernameOrEmail(@Bind("username") String username, @Bind("email") String email);
     
-	@RegisterMapper(UserSearchMapperJdbi.class)
+	@RegisterMapper(UserMinimumMapperJdbi.class)
 	@SqlQuery("SELECT USERNAME, CONCAT(FIRST_NAME, CONCAT(' ',LAST_NAME)) AS NAME, PROFILE_PICTURE "
 			+ "FROM TWSS_USERS WHERE upper(USERNAME) LIKE upper(:word) order by NAME FETCH FIRST 5 ROWS ONLY")
-    public abstract List<UserSearchDTO> searchUser(@Bind("word") String word);
-	
-	/*@RegisterMapper(ChatUserStatusMapperJdbi.class)
-	@SqlQuery("SELECT USERNAME, IS_ONLINE FROM TWSS_USERS WHERE USERNAME IN (<usernames>)")
-    public abstract List<ChatUserStatus> getChatFriendsStatus(@BindBean("usernames") List<String> usernames);*/
+    public abstract List<UserMinimumDTO> searchUser(@Bind("word") String word);
 	
 	
 	public List<ChatUserStatus> getChatFriendsStatus(IDBI dbi, List<String> usernames) {
@@ -63,6 +59,27 @@ public abstract  class UserDao {
 
 		q = baseDao.addInClauseBind(q, typesBindMap);
 		List<ChatUserStatus> output = (List<ChatUserStatus>) q.list();
+
+		return output;
+	}
+	
+	public List<UserMinimumDTO> getMinimumUsersInfo(IDBI dbi, List<String> usernames) {
+
+		BaseDao<UserMinimumDTO> baseDao = new BaseDao<>();
+		
+		String query = "SELECT USERNAME, CONCAT(FIRST_NAME, CONCAT(' ',LAST_NAME)) AS NAME, PROFILE_PICTURE "
+				+ "FROM TWSS_USERS WHERE USERNAME IN (<usernames>)";
+
+		Map<String, List<String>> typesBindMap = new HashMap<>();
+		typesBindMap.put("usernames", usernames);
+		query = baseDao.generateBingIdentifier(query, typesBindMap);
+
+		Handle h = dbi.open();
+		@SuppressWarnings("unchecked")
+		Query<UserMinimumDTO> q = h.createQuery(query).map(new UserMinimumMapperJdbi());
+
+		q = baseDao.addInClauseBind(q, typesBindMap);
+		List<UserMinimumDTO> output = (List<UserMinimumDTO>) q.list();
 
 		return output;
 	}

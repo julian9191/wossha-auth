@@ -1,17 +1,17 @@
 package com.wossha.auth.dto;
 
-public class UserSearchDTO {
+public class UserMinimumDTO {
 	private String username;
 	private String name;
 	private String profilePicture;
 	
-	public UserSearchDTO(String username, String name, String profilePicture) {
+	public UserMinimumDTO(String username, String name, String profilePicture) {
 		this.username = username;
 		this.name = name;
 		this.profilePicture = profilePicture;
 	}
 
-	public UserSearchDTO() {}
+	public UserMinimumDTO() {}
 
 	public String getUsername() {
 		return username;

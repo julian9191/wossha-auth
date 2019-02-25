@@ -22,7 +22,7 @@ import com.wossha.auth.infrastructure.filters.UsernameInfoAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.wossha.auth.dto.ChatUserStatus;
-import com.wossha.auth.dto.UserSearchDTO;
+import com.wossha.auth.dto.UserMinimumDTO;
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
 import com.wossha.auth.infrastructure.services.model.UserSessionInfo;
@@ -66,14 +66,20 @@ public class UserController extends ControllerWrapper{
 	}
 	
 	@GetMapping(value = "/search-user/{word}")
-	public @ResponseBody List<UserSearchDTO> searchUser(@PathVariable String word) {
-		List<UserSearchDTO> c = repo.searchUser(word);
+	public @ResponseBody List<UserMinimumDTO> searchUser(@PathVariable String word) {
+		List<UserMinimumDTO> c = repo.searchUser(word);
 		return c;
 	}
 	
 	@GetMapping(value = "/{username}")
 	public @ResponseBody UserRecord getUserByUsername(@PathVariable String username) {
 		UserRecord t = repo.findUserByUsername(username);
+		return t;
+	}
+	
+	@PostMapping(value = "/get-minimum-users-info")
+	public @ResponseBody List<UserMinimumDTO> getMinimumUsersInfo(@RequestBody List<String> usernames) {
+		List<UserMinimumDTO> t = repo.getMinimumUsersInfo(usernames);
 		return t;
 	}
 	
