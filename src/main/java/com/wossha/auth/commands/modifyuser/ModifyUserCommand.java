@@ -5,12 +5,12 @@ import org.springframework.stereotype.Component;
 
 import com.wossha.auth.WosshaAuthApplication;
 import com.wossha.auth.commands.modifyuser.model.ModifyUser;
-import com.wossha.auth.commands.modifyuser.model.UserDTO;
 import com.wossha.auth.infrastructure.dao.user.UserRecord;
 import com.wossha.auth.infrastructure.mapper.MapperDozer;
 import com.wossha.auth.infrastructure.repositories.UserRepository;
 import com.wossha.json.events.events.api.Event;
 import com.wossha.json.events.events.pictures.SavePictureEvent.Message;
+import com.wossha.json.events.events.pictures.SavePictureEvent.PictureInfo;
 import com.wossha.json.events.events.pictures.SavePictureEvent.SavePictureEvent;
 import com.wossha.json.events.services.UUIDGenerator;
 import com.wossha.msbase.commands.CommandResult;
@@ -84,6 +84,8 @@ public class ModifyUserCommand implements ICommand<ModifyUser>{
 						data.getUser().getCoverPicture().getFilename(), data.getUser().getCoverPicture().getFiletype(),
 						data.getUser().getCoverPicture().getSize(), data.getUser().getCoverPicture().getValue(), PictureTypesEnum.COVER_PICTURE.name(), user.getCoverPicture());
 				
+
+				
 				result.addEvent(pictureEvent);
 			}else {
 				newUser.setCoverPicture(user.getCoverPicture());
@@ -98,10 +100,16 @@ public class ModifyUserCommand implements ICommand<ModifyUser>{
 		}
 	}
 	
+	
 	private SavePictureEvent generateSavePictureEvent(String uuidPicture, String picName, String fileType,
 			Integer fileSize, String value, String type, String uuidPictureToRemove) {
-		Message message = new Message(uuidPicture, picName, fileType, type, fileSize,
+		
+		PictureInfo pictureInfo = new PictureInfo(uuidPicture, picName, fileType, type, fileSize,
 				value, uuidPictureToRemove);
+		
+		Message message = new Message();
+		message.getPictures().add(pictureInfo);
+
 		SavePictureEvent event = new SavePictureEvent(WosshaAuthApplication.APP_NAME, this.username, message);
 		return event;
 	}
