@@ -40,7 +40,7 @@ public class UserController extends ControllerWrapper{
 	private UserRepository repo;
 	
 	@PostMapping(value = "/register-user")
-	public @ResponseBody ResponseEntity<HashMap<String, String>> registerUser(@RequestBody UserRecord user) {
+	public @ResponseBody ResponseEntity<HashMap<String, Object>> registerUser(@RequestBody UserRecord user) {
 		user.setUsername(user.getUsername().toLowerCase());
 		user.setEmail(user.getEmail().toLowerCase());
 		try {
@@ -48,21 +48,21 @@ public class UserController extends ControllerWrapper{
 			
 			if(RegisteredUser != null) {
 				if(RegisteredUser.getUsername().equals(user.getUsername())) {
-					return new ResponseEntity<HashMap<String, String>>(super.wrapMessaje("El nombre de usuario "+user.getUsername()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente"),HttpStatus.INTERNAL_SERVER_ERROR);
+					return new ResponseEntity<HashMap<String, Object>>(super.wrapMessaje("El nombre de usuario "+user.getUsername()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente", null),HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 				if(RegisteredUser.getEmail().equals(user.getEmail())) {
-					return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El email "+user.getEmail()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente"),HttpStatus.INTERNAL_SERVER_ERROR);
+					return new ResponseEntity<HashMap<String, Object>>(wrapMessaje("El email "+user.getEmail()+" ya está siendo utilizado por otra cuenta, por favor intente con uno diferente", null),HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			}
 			
 			if(RegisteredUser==null) {
 				repo.addUser(user);
-				return new ResponseEntity<HashMap<String, String>>(wrapMessaje("El usuario se ha registrado correctamente, ahora puede iniciar sesión"),HttpStatus.OK);
+				return new ResponseEntity<HashMap<String, Object>>(wrapMessaje("El usuario se ha registrado correctamente, ahora puede iniciar sesión", null),HttpStatus.OK);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<HashMap<String, String>>(wrapMessaje("Ha ocurrido un error al intentar registrar el usuario"),HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<HashMap<String, Object>>(wrapMessaje("Ha ocurrido un error al intentar registrar el usuario", null),HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 	@GetMapping(value = "/search-user/{word}")
